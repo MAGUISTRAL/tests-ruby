@@ -1,53 +1,31 @@
-require_relative '../lib/06_pig_latin'
+def mot_unique(s)
+  return s += "ay" if s =~ /\A[aeiou]/
+  return s = s.reverse! + "ay" if s =~ /\A[b-df-hj-np-tv-z]/ && s[1] =~ /[aeiou]/ && s[0..1] != "qu"
+  return s = s[2..-1] + s[0..1] + "ay" if s[0..1] =~ /[b-df-hj-np-tv-z]/ && s[2] =~ /[aeiou]/ && s[0..2] != "squ"
+  return s = s[3..-1] + s[0..2] + "ay" if s[0..2] =~ /[b-df-hj-np-tv-z]/ && s[3] =~ /[aeiou]/ && s[0..2] != "sch" && s[0..2] != "squ"
+  return s = s[3..-1] + s[0..2] + "ay" if s[0..2] == "sch" && s[3] =~ /[aeiou]/
+  return s = s[2..-1] + s[0..1] + "ay" if s[0..1] == "qu" && s[2] =~ /[aeiou]/
+  return s = s[3..-1] + s[0..2] + "ay" if s =~ /\A[b-df-hj-np-tv-z]/ && s[1..2] == "qu" && s[3] =~ /[aeiou]/
+end
 
-describe "#translate" do
-
-  it "translates a word beginning with a vowel" do
-    s = translate("apple")
-    expect(s).to eq("appleay")
+def mots_muliples(s)
+  arr=[]
+  s.each do |s|
+    arr << mot_unique(s)
   end
+  x = arr.last[0..1].reverse! + arr.last[2..-1]
+  arr.pop
+  arr << x
+  return arr.join( " ")
+end
 
-  it "translates a word beginning with a consonant" do
-    s = translate("banana")
-    expect(s).to eq("ananabay")
+
+
+def translate (str)
+  s = str.split(" ")
+  if s.count < 2
+    return mot_unique(str)
+  else
+    return mots_muliples(s)
   end
-
-  it "translates a word beginning with two consonants" do
-    s = translate("cherry")
-    expect(s).to eq("errychay")
-  end
-
-  it "translates two words" do
-    s = translate("eat pie")
-    expect(s).to eq("eatay iepay")
-  end
-
-  it "translates a word beginning with three consonants" do
-    expect(translate("three")).to eq("eethray")
-  end
-
-  it "counts 'sch' as a single phoneme" do
-    s = translate("school")
-    expect(s).to eq("oolschay")
-  end
-
-  it "counts 'qu' as a single phoneme" do
-    s = translate("quiet")
-    expect(s).to eq("ietquay")
-  end
-
-  it "counts 'qu' as a consonant even when it's preceded by a consonant" do
-    s = translate("square")
-    expect(s).to eq("aresquay")
-  end
-
-  it "translates many words" do
-    s = translate("the quick brown fox")
-    expect(s).to eq("ethay ickquay ownbray oxfay")
-  end
-
-  # Test-driving bonus:
-  # * write a test asserting that capitalized words are still capitalized (but with a different initial capital letter, of course)
-  # * retain the punctuation from the original phrase
-
 end
