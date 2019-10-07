@@ -1,35 +1,19 @@
-def time_string(sds)
-  a = ( sds / 60**2 )
-  b = ( sds % 60**2 ) / 60
-  c = ( sds % 60**2 ) % 60
+require_relative '../lib/05_timer'
 
-  if a < 10
-    if b < 10
-      if c < 10
-        return "0#{a}:0#{b}:0#{c}"
-      else
-        return "0#{a}:0#{b}:#{c}"
-      end
-    else
-      if c < 10
-        return "0#{a}:#{b}:0#{c}"
-      else
-        return "0#{a}:#{b}:#{c}"
-      end
-    end
-  else
-    if b < 10
-      if c < 10
-        return "0#{a}:0#{b}:0#{c}"
-      else
-        return "0#{a}:0#{b}:#{c}"
-      end
-    else
-      if c < 10
-        return "0#{a}:#{b}:0#{c}"
-      else
-        return "0#{a}:#{b}:#{c}"
-      end
-    end
+describe 'time_string' do
+  it "should display 0 seconds as 00:00:00" do
+    expect(time_string(0)).to eq("00:00:00")
+  end
+
+  it "should display 12 seconds as 00:00:12" do
+    expect(time_string(12)).to eq("00:00:12")
+  end
+
+  it "should display 66 seconds as 00:01:06" do
+    expect(time_string(66)).to eq("00:01:06")
+  end
+
+  it "should display 4000 seconds as 01:06:40" do
+    expect(time_string(4000)).to eq("01:06:40")
   end
 end
